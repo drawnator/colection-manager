@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/drawnator/colection-manager/issues"
   },
-  "homepage": "https://github.com/drawnator/colection-manager#readme"
+  "homepage": "https://github.com/drawnator/colection-manager#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
 }
