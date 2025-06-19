@@ -1,8 +1,44 @@
 <html>
     <head>
-        Colection manager
+        <h2>Colection manager</h2>
     </head>
     <body>
         this is a colection manager for <b>pokemon tcg cards</b> for intro in progweb class of 2025
+        <h3>
+            Perguntas:
+        </h3>
+        <ol>
+            <li>E se quiséssemos garantir que os objectos req e res fossem sempre utilizados da forma correta, sem depender só da nossa memória ou sorte? com base no que discutimos sobre TypeScript, <b>como ele poderia nos ajudar nesse cenário?</b></li>
+            <li>Como você imaginaria esse mesmo código escrito em TypeScript? O que mudaria na estrutura do código? Quais benefícios você esperaria ter? E quais possíveis dificuldades surgiriam?</li>
+        </ol>
+        <h3>
+            Respostas:
+        </h3>
+        <ol>
+            <li>O TypeScript serviria para verificar a tipagem antes da geração do codigo .js já que um compila no outro e permitira com que definissemos tipos e como podemos ou não podemos interagir com ele</li>
+            <li>
+                Imagino que seria algo como:
+                <code>
+                    <br>
+                    const express:<b>Express</b> = require('express');<br>
+                    const path:<b>Path</b> = require('path');<br>
+                    const app:<b>App</b> = express();<br>
+                    const port:<b>int</b> = 3000;<br>
+                    <br>
+                    app.use(express.static(path.join(__dirname,'public')));<br>
+                    <br>
+                    app.get('/',(req,res) =>{<br>
+                        res.end('Hello, World!\n');<br>
+                    }); <br>
+                    <br>
+                    app.listen(port, () => {<br>
+                        console.log(`server running at http://localhost:${port}/`);<br>
+                    });<br>
+                    <br>
+                </code>
+                Os beneficios para um código simples são são tão aparentes mas as vantagens devem aparecer com o amento da complexidade do projeto dado a segurança adicional provida pela tipagem estática no projeto.<br>
+                Existe a possibilidade dessa falta de flexibilidade faça o processo de desenvolvimento ficar mais lento imagino que essa seria a principal dificuldade acrescentada 
+            </li>
+        </ol>
     </body>
 </html>
