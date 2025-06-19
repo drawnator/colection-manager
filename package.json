@@ -1,0 +1,20 @@
+{
+  "name": "colection-manager",
+  "version": "1.0.0",
+  "description": "colection manager and deck tracker for pokemon tcg",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drawnator/colection-manager.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/drawnator/colection-manager/issues"
+  },
+  "homepage": "https://github.com/drawnator/colection-manager#readme"
+}
