@@ -1,5 +1,7 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../config/database';
+import { Collection } from './Collection';
+import { User } from './User';
 
 enum Modifier {
   Normal,
@@ -18,7 +20,8 @@ enum Modifier {
 // Defina os atributos do modelo
 interface CardAttributes {
   id: number;
-  collection: string;
+  ownerId: number;
+  collectionCode: String;
   number: number;
   modifier: Modifier;
 }
@@ -29,7 +32,8 @@ type CardCreationAttributes = Optional<CardAttributes, 'id'>;
 
 export class Card extends Model<CardAttributes, CardCreationAttributes> implements CardAttributes {
   public id!: number;
-  public collection!: string;
+  public ownerId!: number;
+  public collectionCode!: String;
   public number!: number;
   public modifier!: Modifier;
 }
@@ -43,9 +47,21 @@ Card.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    collection: {
+    ownerId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references:{
+        model: User,
+        key: 'id',
+      }
+    },
+    collectionCode: {
       type: DataTypes.STRING,
       allowNull: false,
+      references:{
+        model: Collection,
+        key: 'id',
+      }
     },
     number: {
       type: DataTypes.INTEGER,
@@ -59,7 +75,10 @@ Card.init(
   },
   {
     sequelize,
-    tableName: "users", 
+    tableName: "cards", 
     timestamps: false,
   }
 );
+
+Card.belongsTo(Collection);
+Card.belongsTo(User);

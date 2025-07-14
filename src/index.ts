@@ -36,6 +36,7 @@ app.get("/users", async (req, res) => {
 
 
 // Testando a conexão e inicializando o servidor
+// force true apaga o banco
 sequelize.sync({ force: true }).then(() => {
   console.log("Banco de dados conectado!");
   app.listen(3000, () => console.log("Servidor rodando na porta 3000"));

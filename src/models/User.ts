@@ -1,5 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../config/database';
+import { Deck } from './Deck';
 
 
 // Defina os atributos do modelo
@@ -50,3 +51,5 @@ User.init(
     timestamps: false,
   }
 );
+
+User.hasMany(Deck,{foreignKey:'ownerId'});

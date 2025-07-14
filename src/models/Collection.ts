@@ -1,24 +1,23 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../config/database';
+import { Card } from './Card';
 
 // Defina os atributos do modelo
 interface CollectionAttributes {
-  id: number;
+  id: string;
   family: string;
   name: string;
-  code: string;
   total: number;
 }
 
 //professor esqueceu de adicionar essa linha importante para o código funcionar
-type CollectionCreationAttributes = Optional<CollectionAttributes, 'id'>;
+type CollectionCreationAttributes = Optional<CollectionAttributes, 'total' | 'family' | 'name'>;
 
 
 export class Collection extends Model<CollectionAttributes, CollectionCreationAttributes> implements CollectionAttributes {
-  public id!: number;
+  public id!: string;
   public family!: string;
   public name!: string;
-  public code!: string;
   public total!: number;
 }
 
@@ -27,8 +26,7 @@ export class Collection extends Model<CollectionAttributes, CollectionCreationAt
 Collection.init(
   {
     id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
+      type: DataTypes.STRING,
       primaryKey: true,
     },
     family: {
@@ -39,11 +37,6 @@ Collection.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    code: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
     total: {
       type: DataTypes.INTEGER,
       allowNull: true,
@@ -51,7 +44,9 @@ Collection.init(
   },
   {
     sequelize,
-    tableName: "users", 
+    tableName: "collection", 
     timestamps: false,
   }
 );
+
+Collection.hasMany(Card,{foreignKey:'collectionCode'});
