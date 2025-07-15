@@ -1,6 +1,8 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../config/database';
 import { Deck } from './Deck';
+import { Bulk } from './Bulk';
+import { Card } from './Card';
 
 
 // Defina os atributos do modelo
@@ -53,3 +55,10 @@ User.init(
 );
 
 User.hasMany(Deck,{foreignKey:'ownerId'});
+Deck.belongsTo(User);
+
+User.hasMany(Bulk,{foreignKey:'ownerId'});
+Bulk.belongsTo(User);
+
+User.hasMany(Card,{foreignKey:'ownerId'});
+Card.belongsTo(User);

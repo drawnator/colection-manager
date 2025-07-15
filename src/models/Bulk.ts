@@ -1,5 +1,6 @@
 import { Model, DataTypes, Optional } from 'sequelize';
 import sequelize from '../config/database';
+import { User } from './User';
 
 // Defina os atributos do modelo
 interface BulkAttributes {
@@ -32,9 +33,13 @@ Bulk.init(
     ownerId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      references:{
+              model: User,
+              key: 'id',
+            }
     },
     name: {
-      type: DataTypes.ARRAY,
+      type: DataTypes.STRING,
       allowNull: false,
       unique: true,
     },

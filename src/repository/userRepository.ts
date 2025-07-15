@@ -1,5 +1,5 @@
 import { User } from "../models/User";
-
+import sequelize from "../config/database";
 
 export class UserRepository {
     // Criar um novo usuário

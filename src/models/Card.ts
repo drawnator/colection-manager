@@ -4,9 +4,9 @@ import { Collection } from './Collection';
 import { User } from './User';
 
 enum Modifier {
-  Normal,
-  holo,
-  Reverse,
+  Normal = 'normal',
+  holo = 'holo',
+  Reverse = 'reverse',
   // pokeball,
   // masterball,
   // Full,
@@ -70,6 +70,7 @@ Card.init(
     },
     modifier: {
       type: DataTypes.ENUM,
+      values: Object.values(Modifier),
       allowNull: true,
     },
   },
@@ -80,5 +81,5 @@ Card.init(
   }
 );
 
+Collection.hasMany(Card,{foreignKey:'collectionCode'});
 Card.belongsTo(Collection);
-Card.belongsTo(User);

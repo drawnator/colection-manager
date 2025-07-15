@@ -5,7 +5,7 @@ import { User } from './User';
 // Defina os atributos do modelo
 interface DeckAttributes {
   id: number;
-  owner: number;
+  ownerId: number;
   name: string;
   victories:number;
   losses:number;
@@ -17,7 +17,7 @@ type DeckCreationAttributes = Optional<DeckAttributes, 'id'|'victories'|'losses'
 
 export class Deck extends Model<DeckAttributes, DeckCreationAttributes> implements DeckAttributes {
   public id!: number;
-  public owner!: number;
+  public ownerId!: number;
   public name!:string;
   public victories!: number;
   public losses!: number;
@@ -32,7 +32,7 @@ Deck.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    owner: {
+    ownerId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references:{
@@ -59,5 +59,3 @@ Deck.init(
     timestamps: false,
   }
 );
-
-Deck.belongsTo(User);

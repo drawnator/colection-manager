@@ -48,5 +48,3 @@ Collection.init(
     timestamps: false,
   }
 );
-
-Collection.hasMany(Card,{foreignKey:'collectionCode'});
