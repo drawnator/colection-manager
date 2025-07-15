@@ -1,6 +1,6 @@
 import { Bulk } from "../models/Bulk";
 
-export class CardRepository {
+export class BulkRepository {
     private model: typeof Bulk;
 
     constructor(){

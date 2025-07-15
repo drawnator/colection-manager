@@ -1,6 +1,6 @@
 import { Deck } from "../models/Deck";
 
-export class CardRepository {
+export class DeckRepository {
     private model: typeof Deck;
 
     constructor(){

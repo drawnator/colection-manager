@@ -1,6 +1,6 @@
 import { Collection } from "../models/Collection";
 
-export class CardRepository {
+export class CollectionRepository {
     private model: typeof Collection;
 
     constructor(){
