@@ -10,11 +10,11 @@ export class CardController{
 
     async create(req:Request,res:Response):Promise<void>{
         try{
-            const {attr} = req.body;
-            if (!attr){
+            const {ownerId,collectionCode,number,modifier} = req.body;
+            if (!ownerId || !collectionCode || !number || !modifier){
                 res.status(400).json({message:'Todos os campos são obrigatórios.'});
             }
-            const new_ = await this.service.create({attr});
+            const new_ = await this.service.create({ownerId,collectionCode,number,modifier});
             res.status(201).json(new_);
 
         } catch (error){

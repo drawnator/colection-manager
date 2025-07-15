@@ -10,11 +10,11 @@ export class CollectionController{
 
     async create(req:Request,res:Response):Promise<void>{
         try{
-            const {attr} = req.body;
-            if (!attr){
+            const {id,family,name,total} = req.body;
+            if (!id){
                 res.status(400).json({message:'Todos os campos são obrigatórios.'});
             }
-            const new_ = await this.service.create({attr});
+            const new_ = await this.service.create({id,family,name,total});
             res.status(201).json(new_);
 
         } catch (error){
@@ -25,7 +25,7 @@ export class CollectionController{
     async get(req:Request,res:Response):Promise<void>{
         try{
             const {id} = req.body;
-            const new_ = this.service.get(id);
+            const new_ = await this.service.get(id);
             res.status(201).json(new_)
         } catch (error){
             res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
@@ -35,7 +35,7 @@ export class CollectionController{
     async update(req:Request,res:Response):Promise<void>{
         try{
             const {id,attr} = req.body;
-            const new_ = this.service.update(id,{attr});
+            const new_ = await this.service.update(id,{attr});
             res.status(201).json(new_)
 
         } catch (error){
@@ -46,7 +46,7 @@ export class CollectionController{
     async delete(req:Request,res:Response):Promise<void>{
         try{
             const {id} = req.body;
-            const new_ = this.service.delete(id);
+            const new_ = await this.service.delete(id);
             res.status(201).json(new_)
         } catch (error){
             res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });

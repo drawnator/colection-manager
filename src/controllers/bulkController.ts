@@ -25,7 +25,7 @@ export class BulkController{
     async get(req:Request,res:Response):Promise<void>{
         try{
             const {id} = req.body;
-            const new_ = this.service.get(id);
+            const new_ = await this.service.get(id);
             res.status(201).json(new_)
         } catch (error){
             res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
@@ -35,7 +35,7 @@ export class BulkController{
     async update(req:Request,res:Response):Promise<void>{
         try{
             const {id,attr} = req.body;
-            const new_ = this.service.update(id,{attr});
+            const new_ = await this.service.update(id,{attr});
             res.status(201).json(new_)
 
         } catch (error){
@@ -46,7 +46,7 @@ export class BulkController{
     async delete(req:Request,res:Response):Promise<void>{
         try{
             const {id} = req.body;
-            const new_ = this.service.delete(id);
+            const new_ = await this.service.delete(id);
             res.status(201).json(new_)
         } catch (error){
             res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
