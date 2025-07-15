@@ -11,7 +11,7 @@ export class UserController{
 
     async createUser(req:Request,res:Response):Promise<void>{
         try{
-            const{name,email,password} = req.body;
+            const {name,email,password} = req.body;
             if(!name || !email || !password){
                 res.status(400).json({message:'Todos os campos são obrigatórios.'});
             }
