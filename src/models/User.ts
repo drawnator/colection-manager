@@ -11,17 +11,20 @@ interface UserAttributes {
   name: string;
   email: string;
   password: string;
+  isActive:boolean;
 }
 
 //professor esqueceu de adicionar essa linha importante para o código funcionar
-type UserCreationAttributes = Optional<UserAttributes, 'id'>;
+type UserCreationAttributes = Optional<UserAttributes, 'id'|'isActive'>;
 
 
+//this causes Type '{ name: any; email: any; password: any; }' is missing the following properties from type 'Omit<User, "id" | "isActive">': _attributes, sequelize, destroy, restore, and 26 more.ts(2345) down the line 
 export class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: number;
   public name!: string;
   public email!: string;
   public password!: string;
+  public isActive!: boolean;
 }
 
 
@@ -46,6 +49,10 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    isActive:{
+      type: DataTypes.BOOLEAN,
+      defaultValue:true,
+    }
   },
   {
     sequelize,

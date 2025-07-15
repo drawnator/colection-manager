@@ -42,7 +42,7 @@ CardToDeck.init(
   },
   {
     sequelize,
-    tableName: "users", 
+    tableName: "cardToDeck", 
     timestamps: false,
   }
 );

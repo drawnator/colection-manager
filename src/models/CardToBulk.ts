@@ -42,7 +42,7 @@ CardToBulk.init(
   },
   {
     sequelize,
-    tableName: "users", 
+    tableName: "cardToBulk", 
     timestamps: false,
   }
 );
