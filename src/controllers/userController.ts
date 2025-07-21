@@ -1,5 +1,4 @@
 import { UserService } from "../services/userService";
-import { User } from "../models/User";
 import { Request, Response } from 'express';
 
 export class UserController{
@@ -30,4 +29,50 @@ export class UserController{
             res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
         }  
     }
+
+    async getUser(req:Request,res:Response):Promise<void>{
+        try{
+            const userId = Number(req.params.id);
+            if (!userId){
+                res.status(400).json({message:'Id não informado.'});
+            }
+            const activeUsers = await this.userService.getUser(userId);
+            res.status(201).json(activeUsers);
+        } catch (error){
+            res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
+        }  
+    }
+
+    async deleteUser(req:Request,res:Response):Promise<void> {
+        try {
+            const userId = Number(req.params.id);
+            if (!userId){
+                res.status(400).json({message:'Id não informado.'});
+            }
+            const new_ = await this.userService.delete(userId);
+            res.status(201).json(new_)
+
+        } catch (error){
+            res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
+        }  
+    }
+
+    async update(req:Request,res:Response):Promise<void>{
+        try{
+            const {name,email,password} = req.body;
+            if(!name && !email && !password){
+                res.status(400).json({message:'sem informações para atualizar'});
+            }
+            const userId = Number(req.params.id);
+            if (!userId){
+                res.status(400).json({message:'Id não informado.'});
+            }
+            const new_ = await this.userService.update(userId,{name,email,password});
+            res.status(201).json(new_)
+
+        } catch (error){
+            res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
+        }  
+    }
+
 }

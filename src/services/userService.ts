@@ -19,6 +19,30 @@ export class UserService {
         return await this.userRepository.findActiveUsers();
     }
 
+    async getUser(id: number):Promise<User>{
+        const user = await this.userRepository.findById(id);
+        if (!user){
+            throw new Error("Usuário não encontrado");
+        }
+        return user;
+    }
+
+    async delete(id: number):Promise<[Number]>{
+        const user = await this.userRepository.deactivateUser(id);
+        if (!user){
+            throw new Error("Usuário não encontrado");
+        }
+        return user;
+    }
+
+    async update(id: number,attr:Partial<User>):Promise<[Number]>{
+        const user = await this.userRepository.update(id,attr);
+        if (!user){
+            throw new Error("Usuário não encontrado");
+        }
+        return user;
+    }
+
     async authenticate(email:string,password:string):Promise<User>{
         const user = await this.userRepository.findByEmail(email);
         if (!user){

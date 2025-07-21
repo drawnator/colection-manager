@@ -22,6 +22,12 @@ app.post("/users", async (req, res) => {await userController.createUser(req,res)
 
 app.get("/users", async (req, res) => {await userController.getAllUsers(req,res);});
 
+app.get("/users/:id", async (req, res) => {await userController.getUser(req,res);});
+
+app.patch("/users/:id", async (req, res) => {await userController.update(req,res);});
+
+app.delete("/users/:id", async (req, res) => {await userController.deleteUser(req,res);});
+
 app.post("/cards", async (req,res) => {await cardController.create(req,res);});
 
 app.get("/cards", async (req,res) => {await cardController.get(req,res);});

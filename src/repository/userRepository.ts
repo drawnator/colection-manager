@@ -18,11 +18,11 @@ export class UserRepository {
   }
 
   async findActiveUsers(): Promise<User[]>{
-    return await this.UserModel.findAll({where:{isActive:true}});
+    return await this.UserModel.scope('secure').findAll({where:{isActive:true}});
   }
 
   async findById(id:number): Promise<User|null>{
-    return await this.UserModel.findByPk(id);
+    return await this.UserModel.scope('secure').findByPk(id);
   }
 
   //modificado [number,User[]] -> [number]
@@ -32,6 +32,10 @@ export class UserRepository {
 
   async deactivateUser(id:number):Promise<[number]>{
     return await this.UserModel.update({isActive:false},{where:{id}});
+  }
+
+  async deleteById(id:number):Promise<number>{
+    return await this.UserModel.destroy({where:{id}});
   }
 
   async findByEmail(email:string):Promise<User|null>{

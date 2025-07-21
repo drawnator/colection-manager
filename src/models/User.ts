@@ -58,6 +58,11 @@ User.init(
     sequelize,
     tableName: "users", 
     timestamps: false,
+    scopes:{
+      secure:{
+        attributes:{exclude:['password']}
+      }
+    }
   }
 );
 
