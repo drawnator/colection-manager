@@ -30,35 +30,35 @@ app.delete("/users/:id", async (req, res) => {await userController.deleteUser(re
 
 app.post("/cards", async (req,res) => {await cardController.create(req,res);});
 
-app.get("/cards", async (req,res) => {await cardController.get(req,res);});
+app.get("/cards/:id", async (req,res) => {await cardController.get(req,res);});
 
-app.patch("/cards", async (req,res) => {await cardController.update(req,res);});
+app.patch("/cards/:id", async (req,res) => {await cardController.update(req,res);});
 
-app.delete("/cards", async (req,res) => {await cardController.delete(req,res);});
+app.delete("/cards/:id", async (req,res) => {await cardController.delete(req,res);});
 
 app.post("/bulks", async (req,res) => {await bulkController.create(req,res);});
 
-app.get("/bulks", async (req,res) => {await bulkController.get(req,res);});
+app.get("/bulks/:id", async (req,res) => {await bulkController.get(req,res);});
 
-app.patch("/bulks", async (req,res) => {await bulkController.update(req,res);});
+app.patch("/bulks/:id", async (req,res) => {await bulkController.update(req,res);});
 
-app.delete("/bulks", async (req,res) => {await bulkController.delete(req,res);});
+app.delete("/bulks/:id", async (req,res) => {await bulkController.delete(req,res);});
 
 app.post("/decks", async (req,res) => {await deckController.create(req,res);});
 
-app.get("/decks", async (req,res) => {await deckController.get(req,res);});
+app.get("/decks/:id", async (req,res) => {await deckController.get(req,res);});
 
-app.patch("/decks", async (req,res) => {await deckController.update(req,res);});
+app.patch("/decks/:id", async (req,res) => {await deckController.update(req,res);});
 
-app.delete("/decks", async (req,res) => {await deckController.delete(req,res);});
+app.delete("/decks/:id", async (req,res) => {await deckController.delete(req,res);});
 
 app.post("/collections", async (req,res) => {await collectionController.create(req,res);});
 
-app.get("/collections", async (req,res) => {await collectionController.get(req,res);});
+app.get("/collections/:id", async (req,res) => {await collectionController.get(req,res);});
 
-app.patch("/collections", async (req,res) => {await collectionController.update(req,res);});
+app.patch("/collections/:id", async (req,res) => {await collectionController.update(req,res);});
 
-app.delete("/collections", async (req,res) => {await collectionController.delete(req,res);});
+app.delete("/collections/:id", async (req,res) => {await collectionController.delete(req,res);});
 
 // Testando a conexão e inicializando o servidor
 // force true apaga o banco

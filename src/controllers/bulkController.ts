@@ -10,11 +10,11 @@ export class BulkController{
 
     async create(req:Request,res:Response):Promise<void>{
         try{
-            const {attr} = req.body;
-            if (!attr){
+            const {ownerId,name,description} = req.body;
+            if (!ownerId || !name){
                 res.status(400).json({message:'Todos os campos são obrigatórios.'});
             }
-            const new_ = await this.service.create({attr});
+            const new_ = await this.service.create({ownerId,name,description});
             res.status(201).json(new_);
 
         } catch (error){
@@ -24,7 +24,10 @@ export class BulkController{
 
     async get(req:Request,res:Response):Promise<void>{
         try{
-            const {id} = req.body;
+            const id = Number(req.params.id);
+            if (!id){
+                res.status(400).json({message:'Id não informado.'});
+            }
             const new_ = await this.service.get(id);
             res.status(201).json(new_)
         } catch (error){
@@ -34,8 +37,12 @@ export class BulkController{
 
     async update(req:Request,res:Response):Promise<void>{
         try{
-            const {id,attr} = req.body;
-            const new_ = await this.service.update(id,{attr});
+            const id = Number(req.params.id);
+            if (!id){
+                res.status(400).json({message:'Id não informado.'});
+            }
+            const {ownerId,name,description} = req.body;
+            const new_ = await this.service.update(id,{ownerId,name,description});
             res.status(201).json(new_)
 
         } catch (error){
@@ -45,7 +52,10 @@ export class BulkController{
 
     async delete(req:Request,res:Response):Promise<void>{
         try{
-            const {id} = req.body;
+            const id = Number(req.params.id);
+            if (!id){
+                res.status(400).json({message:'Id não informado.'});
+            }
             const new_ = await this.service.delete(id);
             res.status(201).json(new_)
         } catch (error){

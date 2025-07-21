@@ -24,7 +24,10 @@ export class CollectionController{
 
     async get(req:Request,res:Response):Promise<void>{
         try{
-            const {id} = req.body;
+            const id = req.params.id;
+            if (!id){
+                res.status(400).json({message:'Id não informado.'});
+            }
             const new_ = await this.service.get(id);
             res.status(201).json(new_)
         } catch (error){
@@ -34,8 +37,12 @@ export class CollectionController{
 
     async update(req:Request,res:Response):Promise<void>{
         try{
-            const {id,attr} = req.body;
-            const new_ = await this.service.update(id,{attr});
+            const id = req.params.id;
+            if (!id){
+                res.status(400).json({message:'Id não informado.'});
+            }
+            const {family,name,total} = req.body;
+            const new_ = await this.service.update(id,{family,name,total});
             res.status(201).json(new_)
 
         } catch (error){
@@ -45,7 +52,10 @@ export class CollectionController{
 
     async delete(req:Request,res:Response):Promise<void>{
         try{
-            const {id} = req.body;
+            const id = req.params.id;
+            if (!id){
+                res.status(400).json({message:'Id não informado.'});
+            }
             const new_ = await this.service.delete(id);
             res.status(201).json(new_)
         } catch (error){

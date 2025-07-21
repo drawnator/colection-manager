@@ -12,7 +12,7 @@ export class CollectionService{
         return await this.repository.create(data)
     }
 
-    async get(id:number):Promise<Collection>{
+    async get(id:string):Promise<Collection>{
         const instance = await this.repository.findById(id);
         if (!instance) {
             throw new Error("instancia inexistence")
@@ -20,11 +20,11 @@ export class CollectionService{
         return instance;
     }
 
-    async update(id:number,data:any):Promise<[number]>{
+    async update(id:string,data:any):Promise<[number]>{
         return await this.repository.update(id,data);
     }
 
-    async delete(id:number):Promise<number>{
+    async delete(id:string):Promise<number>{
         return await this.repository.delete(id);
     }
 }

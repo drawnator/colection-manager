@@ -24,8 +24,11 @@ export class CardController{
 
     async get(req:Request,res:Response):Promise<void>{
         try{
-            const {id} = req.body;
-            const new_ = this.service.get(id);
+            const id = Number(req.params.id);
+            if (!id){
+                res.status(400).json({message:'Id não informado.'});
+            }
+            const new_ = await this.service.get(id);
             res.status(201).json(new_)
         } catch (error){
             res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
@@ -34,8 +37,15 @@ export class CardController{
 
     async update(req:Request,res:Response):Promise<void>{
         try{
-            const {id,attr} = req.body;
-            const new_ = this.service.update(id,{attr});
+            const id = Number(req.params.id);
+            if (!id){
+                res.status(400).json({message:'Id não informado.'});
+            }
+            const {ownerId,collectionCode,number,modifier} = req.body;
+            if(!ownerId && !collectionCode && !number && !modifier){
+                res.status(400).json({message:'sem informações para atualizar'});
+            }
+            const new_ = await this.service.update(id,{ownerId,collectionCode,number,modifier});
             res.status(201).json(new_)
 
         } catch (error){
@@ -45,8 +55,11 @@ export class CardController{
 
     async delete(req:Request,res:Response):Promise<void>{
         try{
-            const {id} = req.body;
-            const new_ = this.service.delete(id);
+            const id = Number(req.params.id);
+            if (!id){
+                res.status(400).json({message:'Id não informado.'});
+            }
+            const new_ = await this.service.delete(id);
             res.status(201).json(new_)
         } catch (error){
             res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
