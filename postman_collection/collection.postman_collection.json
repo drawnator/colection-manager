@@ -1,0 +1,136 @@
+{
+	"info": {
+		"_postman_id": "6c47e258-c62d-44d4-9b44-14e21f7fae07",
+		"name": "collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "46913864"
+	},
+	"item": [
+		{
+			"name": "get_colection",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/collections/SVBpt",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"collections",
+						"SVBpt"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete_colection",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":\"SVBpt\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/collections/SVBpt",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"collections",
+						"SVBpt"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "post_collection",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":\"SVBpt\",\r\n    \"family\":\"oi@test.com\",\r\n    \"name\":\"SVB\",\r\n    \"total\":1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/collections",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"collections"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "patch_collection",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"family\":\"scarled and violet\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/collections/SVBpt",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"collections",
+						"SVBpt"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
