@@ -24,7 +24,7 @@ export class CardController{
 
     async get(req:Request,res:Response):Promise<void>{
         try{
-            const id = Number(req.params.id);
+            const id = Number(req.query.id);
             if (!id){
                 res.status(400).json({message:'Id não informado.'});
             }
@@ -37,7 +37,7 @@ export class CardController{
 
     async update(req:Request,res:Response):Promise<void>{
         try{
-            const id = Number(req.params.id);
+            const id = Number(req.query.id);
             if (!id){
                 res.status(400).json({message:'Id não informado.'});
             }
@@ -55,7 +55,7 @@ export class CardController{
 
     async delete(req:Request,res:Response):Promise<void>{
         try{
-            const id = Number(req.params.id);
+            const id = Number(req.query.id);
             if (!id){
                 res.status(400).json({message:'Id não informado.'});
             }

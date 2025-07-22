@@ -24,7 +24,7 @@ export class BulkController{
 
     async get(req:Request,res:Response):Promise<void>{
         try{
-            const id = Number(req.params.id);
+            const id = Number(req.query.id);
             if (!id){
                 res.status(400).json({message:'Id não informado.'});
             }
@@ -37,7 +37,7 @@ export class BulkController{
 
     async update(req:Request,res:Response):Promise<void>{
         try{
-            const id = Number(req.params.id);
+            const id = Number(req.query.id);
             if (!id){
                 res.status(400).json({message:'Id não informado.'});
             }
@@ -52,7 +52,7 @@ export class BulkController{
 
     async delete(req:Request,res:Response):Promise<void>{
         try{
-            const id = Number(req.params.id);
+            const id = Number(req.query.id);
             if (!id){
                 res.status(400).json({message:'Id não informado.'});
             }
@@ -66,7 +66,6 @@ export class BulkController{
      async add_card(req:Request,res:Response):Promise<void>{
         try{
             const {bulkId,cardId} = req.body;
-            console.log(bulkId);
             await this.service.add_card(bulkId,cardId);
              res.status(201).json({message:"success"})
         } catch (error){
@@ -86,7 +85,7 @@ export class BulkController{
     
     async get_cards(req:Request,res:Response):Promise<void>{
         try {
-            const id = Number(req.params.id);
+            const id = Number(req.query.id);
             const _cards = await this.service.get_cards(id);
              res.status(201).json(_cards)
         } catch (error){

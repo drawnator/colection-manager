@@ -20,43 +20,49 @@ const collectionController = new CollectionController();
 
 app.post("/users", async (req, res) => {await userController.createUser(req,res);});
 
-app.get("/users", async (req, res) => {await userController.getAllUsers(req,res);});
+// app.get("/users", async (req, res) => {await userController.getAllUsers(req,res);});
 
-app.get("/users/:id", async (req, res) => {await userController.getUser(req,res);});
+app.get("/users", async (req, res) => {await userController.getUser(req,res);});
 
-app.patch("/users/:id", async (req, res) => {await userController.update(req,res);});
+app.patch("/users", async (req, res) => {await userController.update(req,res);});
 
-app.delete("/users/:id", async (req, res) => {await userController.deleteUser(req,res);});
+app.delete("/users", async (req, res) => {await userController.deleteUser(req,res);});
 
 app.post("/cards", async (req,res) => {await cardController.create(req,res);});
 
-app.get("/cards/:id", async (req,res) => {await cardController.get(req,res);});
+app.get("/cards", async (req,res) => {await cardController.get(req,res);});
 
-app.patch("/cards/:id", async (req,res) => {await cardController.update(req,res);});
+app.patch("/cards", async (req,res) => {await cardController.update(req,res);});
 
-app.delete("/cards/:id", async (req,res) => {await cardController.delete(req,res);});
+app.delete("/cards", async (req,res) => {await cardController.delete(req,res);});
 
 app.post("/bulks", async (req,res) => {await bulkController.create(req,res);});
 
-app.get("/bulks/:id", async (req,res) => {await bulkController.get(req,res);});
+app.get("/bulks", async (req,res) => {await bulkController.get(req,res);});
 
-app.patch("/bulks/:id", async (req,res) => {await bulkController.update(req,res);});
+app.patch("/bulks", async (req,res) => {await bulkController.update(req,res);});
 
-app.delete("/bulks/:id", async (req,res) => {await bulkController.delete(req,res);});
+app.delete("/bulks", async (req,res) => {await bulkController.delete(req,res);});
 
 app.post("/bulks/cards", async (req,res) => {await bulkController.add_card(req,res);});
 
 app.delete("/bulks/cards", async (req,res) => {await bulkController.remove_card(req,res);});
 
-app.get("/bulks/cards/:id", async (req,res) => {await bulkController.get_cards(req,res);});
+app.get("/bulks/cards", async (req,res) => {await bulkController.get_cards(req,res);});
 
 app.post("/decks", async (req,res) => {await deckController.create(req,res);});
 
-app.get("/decks/:id", async (req,res) => {await deckController.get(req,res);});
+app.get("/decks", async (req,res) => {await deckController.get(req,res);});
 
-app.patch("/decks/:id", async (req,res) => {await deckController.update(req,res);});
+app.patch("/decks", async (req,res) => {await deckController.update(req,res);});
 
-app.delete("/decks/:id", async (req,res) => {await deckController.delete(req,res);});
+app.delete("/decks", async (req,res) => {await deckController.delete(req,res);});
+
+app.post("/decks/cards", async (req,res) => {await deckController.add_card(req,res);});
+
+app.delete("/decks/cards", async (req,res) => {await deckController.remove_card(req,res);});
+
+app.get("/decks/cards", async (req,res) => {await deckController.get_cards(req,res);});
 
 app.post("/collections", async (req,res) => {await collectionController.create(req,res);});
 

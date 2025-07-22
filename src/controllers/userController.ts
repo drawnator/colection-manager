@@ -32,12 +32,15 @@ export class UserController{
 
     async getUser(req:Request,res:Response):Promise<void>{
         try{
-            const userId = Number(req.params.id);
+            const userId = Number(req.query.id);
             if (!userId){
-                res.status(400).json({message:'Id não informado.'});
+                this.getAllUsers(req,res);
+                // res.status(400).json({message:'Id não informado.'});
             }
-            const activeUsers = await this.userService.getUser(userId);
-            res.status(201).json(activeUsers);
+            else{
+                const activeUsers = await this.userService.getUser(userId);
+                res.status(201).json(activeUsers);
+            }
         } catch (error){
             res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
         }  
@@ -45,7 +48,7 @@ export class UserController{
 
     async deleteUser(req:Request,res:Response):Promise<void> {
         try {
-            const userId = Number(req.params.id);
+            const userId = Number(req.query.id);
             if (!userId){
                 res.status(400).json({message:'Id não informado.'});
             }
@@ -63,7 +66,7 @@ export class UserController{
             if(!name && !email && !password){
                 res.status(400).json({message:'sem informações para atualizar'});
             }
-            const userId = Number(req.params.id);
+            const userId = Number(req.query.id);
             if (!userId){
                 res.status(400).json({message:'Id não informado.'});
             }
