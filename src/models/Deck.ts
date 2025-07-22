@@ -1,6 +1,7 @@
-import { Model, DataTypes, Optional } from 'sequelize';
+import { Model, DataTypes, Optional, BelongsToManyGetAssociationsMixin, BelongsToManyAddAssociationMixin, BelongsToManyRemoveAssociationMixin } from 'sequelize';
 import sequelize from '../config/database';
 import { User } from './User';
+import { Card } from './Card';
 
 // Defina os atributos do modelo
 interface DeckAttributes {
@@ -21,6 +22,10 @@ export class Deck extends Model<DeckAttributes, DeckCreationAttributes> implemen
   public name!:string;
   public victories!: number;
   public losses!: number;
+
+  declare getCards: BelongsToManyGetAssociationsMixin<Card>;
+  declare addCard: BelongsToManyAddAssociationMixin<Card,Card['id']>;
+  declare removeCard: BelongsToManyRemoveAssociationMixin<Card,Card['id']>;
 }
 
 
@@ -59,3 +64,6 @@ Deck.init(
     timestamps: false,
   }
 );
+
+Deck.belongsToMany(Card,{through:'CardToDeck',foreignKey:'deckId'});
+Card.belongsToMany(Deck,{through:'CardToDeck',foreignKey:'cardId'});
