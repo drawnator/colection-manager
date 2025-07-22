@@ -4,21 +4,28 @@ import { Card } from './Card';
 import { Bulk } from './Bulk';
 
 interface CardToBulkAttributes {
+  id: number;
   cardId: number;
   BulkId: number;
-  ammount: number;
+  // ammount: number;
 }
 
 export class CardToBulk extends Model<CardToBulkAttributes> {
+  public id!: number;
   public cardId!: number;
   public BulkId!: number;
-  public ammount!: number;
+  // public ammount!: number;
 }
 
 
 // Inicialize o modelo com os campos no banco
 CardToBulk.init(
   {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
     cardId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -33,12 +40,12 @@ CardToBulk.init(
       references: {
         model: Bulk,
         key: 'id',
-        },
+        }
     },
-    ammount:{
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-    }
+    // ammount:{
+    //   type: DataTypes.INTEGER,
+    //   defaultValue: 0,
+    // }
   },
   {
     sequelize,
@@ -46,6 +53,4 @@ CardToBulk.init(
     timestamps: false,
   }
 );
-Bulk.belongsToMany(Card,{through:CardToBulk});
-Card.belongsToMany(Bulk,{through:CardToBulk});
 // Bulk.hasMany(Card);

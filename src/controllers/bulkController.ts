@@ -62,4 +62,35 @@ export class BulkController{
             res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
         }  
     }
+
+     async add_card(req:Request,res:Response):Promise<void>{
+        try{
+            const {bulkId,cardId} = req.body;
+            console.log(bulkId);
+            await this.service.add_card(bulkId,cardId);
+             res.status(201).json({message:"success"})
+        } catch (error){
+            res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
+        }  
+    }
+
+    async remove_card(req:Request,res:Response):Promise<void>{
+        try {
+            const {bulkId,cardId} = req.body;
+            await this.service.remove_card(bulkId,cardId);
+             res.status(201).json({message:"success"})
+        } catch (error){
+            res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
+        }  
+    }
+    
+    async get_cards(req:Request,res:Response):Promise<void>{
+        try {
+            const id = Number(req.params.id);
+            const _cards = await this.service.get_cards(id);
+             res.status(201).json(_cards)
+        } catch (error){
+            res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
+        }  
+    }
 }

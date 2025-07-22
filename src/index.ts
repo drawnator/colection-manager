@@ -44,6 +44,12 @@ app.patch("/bulks/:id", async (req,res) => {await bulkController.update(req,res)
 
 app.delete("/bulks/:id", async (req,res) => {await bulkController.delete(req,res);});
 
+app.post("/bulks/cards", async (req,res) => {await bulkController.add_card(req,res);});
+
+app.delete("/bulks/cards", async (req,res) => {await bulkController.remove_card(req,res);});
+
+app.get("/bulks/cards/:id", async (req,res) => {await bulkController.get_cards(req,res);});
+
 app.post("/decks", async (req,res) => {await deckController.create(req,res);});
 
 app.get("/decks/:id", async (req,res) => {await deckController.get(req,res);});

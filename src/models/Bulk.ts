@@ -1,6 +1,8 @@
-import { Model, DataTypes, Optional } from 'sequelize';
+import { Model, DataTypes, Optional, BelongsToManyGetAssociationsMixin, BelongsToManyAddAssociationMixin, BelongsToManyRemoveAssociationMixin } from 'sequelize';
 import sequelize from '../config/database';
 import { User } from './User';
+import { Card } from './Card';
+// import { CardToBulk } from './CardToBulk';
 
 // Defina os atributos do modelo
 interface BulkAttributes {
@@ -19,6 +21,12 @@ export class Bulk extends Model<BulkAttributes, BulkCreationAttributes> implemen
   public ownerId!: number;
   public name!: string;
   public description!: string;
+
+  declare getCards: BelongsToManyGetAssociationsMixin<Card>;
+  declare addCard: BelongsToManyAddAssociationMixin<Card,Card['id']>;
+  declare removeCard: BelongsToManyRemoveAssociationMixin<Card,Card['id']>;
+
+  
 }
 
 
@@ -54,5 +62,8 @@ Bulk.init(
     timestamps: false,
   }
 );
+
+Bulk.belongsToMany(Card,{through:'CardToBulk',foreignKey:"bulkId"});
+Card.belongsToMany(Bulk,{through:'CardToBulk',foreignKey:"cardId"});
 
 //TODO Deck.belongsTo(User);
