@@ -11,9 +11,9 @@ export class UserController{
     async createUser(req:Request,res:Response):Promise<void>{
         try{
             const userData = req.body;
-            // if(!name || !email || !password){
-            //     res.status(400).json({message:'Todos os campos são obrigatórios.'});
-            // }
+            if(!userData.name || !userData.email || !userData.password){
+                res.status(400).json({message:'Todos os campos são obrigatórios.'});
+            }
             const newUser = await this.userService.createUser(userData);
             res.status(201).json(newUser);
         } catch (error){
@@ -62,15 +62,15 @@ export class UserController{
 
     async update(req:Request,res:Response):Promise<void>{
         try{
-            const {name,email,password} = req.body;
-            if(!name && !email && !password){
+            const userData = req.body;
+            if(!userData.name && !userData.email && !userData.password){
                 res.status(400).json({message:'sem informações para atualizar'});
             }
             const userId = Number(req.query.id);
             if (!userId){
                 res.status(400).json({message:'Id não informado.'});
             }
-            const new_ = await this.userService.update(userId,{name,email,password});
+            const new_ = await this.userService.update(userId,userData);
             res.status(201).json(new_)
 
         } catch (error){
