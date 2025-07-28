@@ -10,11 +10,11 @@ export class UserController{
 
     async createUser(req:Request,res:Response):Promise<void>{
         try{
-            const {name,email,password} = req.body;
-            if(!name || !email || !password){
-                res.status(400).json({message:'Todos os campos são obrigatórios.'});
-            }
-            const newUser = await this.userService.createUser({name,email,password});
+            const userData = req.body;
+            // if(!name || !email || !password){
+            //     res.status(400).json({message:'Todos os campos são obrigatórios.'});
+            // }
+            const newUser = await this.userService.createUser(userData);
             res.status(201).json(newUser);
         } catch (error){
             res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });

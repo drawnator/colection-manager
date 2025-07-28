@@ -8,7 +8,7 @@ export class UserRepository {
     this.UserModel = User;//sequelize.model('User');
   }
     // Criar um novo usuário
-  async create(UserData:any):Promise<User> {
+  async create(UserData:User):Promise<User> {
     const existingUser = await this.UserModel.findOne({where:{email:UserData.email}});
     if (existingUser){
       throw new Error('Email já está em uso.');

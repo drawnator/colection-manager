@@ -8,7 +8,7 @@ export class UserService {
         this.userRepository = new UserRepository();
     }
 
-    async createUser(userData:any):Promise<User>{
+    async createUser(userData:User):Promise<User>{
         if (userData.password.length<6){
             throw new Error('A senha deve ter pelo menos 6 caracteres.')
         }
