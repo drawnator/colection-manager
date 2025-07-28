@@ -1,7 +1,7 @@
 import * as express from "express";
 import * as dotenv from "dotenv";
 import  sequelize from "./config/database";
-import { UserController } from "./controllers/userController";
+import userRoutes  from "./routes/userRoutes";
 import { CardController } from "./controllers/cardController";
 import { BulkController } from "./controllers/bulkController";
 import { DeckController } from "./controllers/deckController";
@@ -12,21 +12,12 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-const userController = new UserController();
 const cardController = new CardController();
 const bulkController = new BulkController();
 const deckController = new DeckController();
 const collectionController = new CollectionController();
 
-app.post("/users", async (req, res) => {await userController.createUser(req,res);});
-
-// app.get("/users", async (req, res) => {await userController.getAllUsers(req,res);});
-
-app.get("/users", async (req, res) => {await userController.getUser(req,res);});
-
-app.patch("/users", async (req, res) => {await userController.update(req,res);});
-
-app.delete("/users", async (req, res) => {await userController.deleteUser(req,res);});
+app.use("/users", userRoutes);
 
 app.post("/cards", async (req,res) => {await cardController.create(req,res);});
 
