@@ -1,24 +1,31 @@
+import { AuthRequest } from "../middlewares/authMiddleware";
 import { BulkService } from "../services/bulkService";
 import { Request, Response } from 'express';
+import { CardService } from "../services/cardService";
 
 export class BulkController{
     private service: BulkService;
+    private cardService :CardService;
 
-    constructor(){
-        this.service = new BulkService();
+    constructor(service:BulkService,cardService:CardService){
+        this.service = service;
+        this.cardService = cardService;
     }
 
-    async create(req:Request,res:Response):Promise<void>{
+    async create(req:AuthRequest,res:Response):Promise<Response>{
         try{
             const {ownerId,name,description} = req.body;
+            if (req.user.id != ownerId) {
+                return res.status(400).json({message:'Sem permissão'})
+            }
             if (!ownerId || !name){
-                res.status(400).json({message:'Todos os campos são obrigatórios.'});
+                return res.status(400).json({message:'Todos os campos são obrigatórios.'});
             }
             const new_ = await this.service.create({ownerId,name,description});
-            res.status(201).json(new_);
+            return res.status(201).json(new_);
 
         } catch (error){
-            res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
+            return res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
         }  
     }
 
@@ -35,51 +42,85 @@ export class BulkController{
         }  
     }
 
-    async update(req:Request,res:Response):Promise<void>{
+    async getUserBulks(req:Request,res:Response):Promise<void>{
+        try{
+            const userId = Number(req.query.id);
+            if (!userId){
+                res.status(400).json({message:'Id não informado.'});
+            }
+            else{
+                const userBulks = await this.service.getByUserId(userId);
+                res.status(201).json(userBulks);
+            }
+
+        } catch (error){
+            res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
+        }  
+    }
+
+    async update(req:AuthRequest,res:Response):Promise<Response>{
         try{
             const id = Number(req.query.id);
             if (!id){
-                res.status(400).json({message:'Id não informado.'});
+                return res.status(400).json({message:'Id não informado.'});
+            }
+            if (req.user.id != (await this.service.get(id)).ownerId) {
+                return res.status(400).json({message:'Sem permissão'})
             }
             const {ownerId,name,description} = req.body;
             const new_ = await this.service.update(id,{ownerId,name,description});
-            res.status(201).json(new_)
+            return res.status(201).json(new_)
 
         } catch (error){
-            res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
+            return res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
         }  
     }
 
-    async delete(req:Request,res:Response):Promise<void>{
+    async delete(req:AuthRequest,res:Response):Promise<Response>{
         try{
             const id = Number(req.query.id);
             if (!id){
-                res.status(400).json({message:'Id não informado.'});
+                return res.status(400).json({message:'Id não informado.'});
+            }
+            if (req.user.id != (await this.service.get(id)).ownerId) {
+                return res.status(400).json({message:'Sem permissão'})
             }
             const new_ = await this.service.delete(id);
-            res.status(201).json(new_)
+            return res.status(201).json(new_)
         } catch (error){
-            res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
+            return res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
         }  
     }
 
-     async add_card(req:Request,res:Response):Promise<void>{
+     async add_card(req:AuthRequest,res:Response):Promise<Response>{
         try{
             const {bulkId,cardId} = req.body;
+            if (req.user.id != (await this.service.get(bulkId)).ownerId) {
+                return res.status(400).json({message:'Sem permissão'})
+            }
+            if (req.user.id != (await this.cardService.get(cardId)).ownerId) {
+                return res.status(400).json({message:'Sem permissão'})
+            }
             await this.service.add_card(bulkId,cardId);
-             res.status(201).json({message:"success"})
+            return res.status(201).json({message:"success"})
         } catch (error){
-            res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
+            return res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
         }  
     }
 
-    async remove_card(req:Request,res:Response):Promise<void>{
+    async remove_card(req:AuthRequest,res:Response):Promise<Response>{
         try {
             const {bulkId,cardId} = req.body;
+            if (req.user.id != (await this.service.get(bulkId)).ownerId) {
+                return res.status(400).json({message:'Sem permissão'})
+            }
+            if (req.user.id != (await this.cardService.get(cardId)).ownerId) {
+                return res.status(400).json({message:'Sem permissão'})
+            }
             await this.service.remove_card(bulkId,cardId);
-             res.status(201).json({message:"success"})
+            return res.status(201).json({message:"success"})
         } catch (error){
-            res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
+            return res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
         }  
     }
     

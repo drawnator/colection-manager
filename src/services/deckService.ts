@@ -5,8 +5,8 @@ import { DeckRepository } from "../repository/deckRepository";
 export class DeckService{
     private repository: DeckRepository;
 
-    constructor(){
-        this.repository = new DeckRepository();
+    constructor(repository:DeckRepository){
+        this.repository = repository;
     }
 
     async create(data:any):Promise<Deck>{

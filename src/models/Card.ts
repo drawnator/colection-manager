@@ -66,7 +66,7 @@ Card.init(
     number: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      unique: true,
+      // unique: true,
     },
     modifier: {
       type: DataTypes.ENUM,

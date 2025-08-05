@@ -4,8 +4,8 @@ import { Request, Response } from 'express';
 export class CollectionController{
     private service: CollectionService;
 
-    constructor(){
-        this.service = new CollectionService();
+    constructor(service:CollectionService){
+        this.service = service;
     }
 
     async create(req:Request,res:Response):Promise<void>{

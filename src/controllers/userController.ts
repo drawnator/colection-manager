@@ -1,11 +1,12 @@
+import { AuthRequest } from "../middlewares/authMiddleware";
 import { UserService } from "../services/userService";
 import { Request, Response } from 'express';
 
 export class UserController{
     private userService: UserService;
 
-    constructor(){
-        this.userService = new UserService();
+    constructor(userService:UserService){
+        this.userService = userService;
     }
 
     async createUser(req:Request,res:Response):Promise<void>{
@@ -14,7 +15,7 @@ export class UserController{
             if(!userData.name || !userData.email || !userData.password){
                 res.status(400).json({message:'Todos os campos são obrigatórios.'});
             }
-            const newUser = await this.userService.createUser(userData);
+            const newUser = await this.userService.createUserCrypt(userData);
             res.status(201).json(newUser);
         } catch (error){
             res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
@@ -46,9 +47,9 @@ export class UserController{
         }  
     }
 
-    async deleteUser(req:Request,res:Response):Promise<void> {
+    async deleteUser(req:AuthRequest,res:Response):Promise<void> {
         try {
-            const userId = Number(req.query.id);
+            const userId = Number(req.user.id);
             if (!userId){
                 res.status(400).json({message:'Id não informado.'});
             }
@@ -60,13 +61,14 @@ export class UserController{
         }  
     }
 
-    async update(req:Request,res:Response):Promise<void>{
+    async update(req:AuthRequest,res:Response):Promise<void>{
         try{
             const userData = req.body;
             if(!userData.name && !userData.email && !userData.password){
                 res.status(400).json({message:'sem informações para atualizar'});
             }
-            const userId = Number(req.query.id);
+            console.log(req.user)
+            const userId = Number(req.user.id);
             if (!userId){
                 res.status(400).json({message:'Id não informado.'});
             }
@@ -76,6 +78,16 @@ export class UserController{
         } catch (error){
             res.status(500).json({ message: (error instanceof Error ? error.message : 'Internal server error') });
         }  
+    }
+
+    async login(req:Request, res:Response):Promise<Response>{
+        try{
+            const{email,password} = req.body;
+            const authResult = await this.userService.authenticate(email,password);
+            return res.json(authResult);
+        } catch (error:any){
+            return res.status(400).json({message:error.message});
+        }
     }
 
 }

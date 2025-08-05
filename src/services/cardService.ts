@@ -4,8 +4,8 @@ import { CardRepository } from "../repository/cardRepository";
 export class CardService{
     private repository: CardRepository;
 
-    constructor(){
-        this.repository = new CardRepository();
+    constructor(repository:CardRepository){
+        this.repository = repository;
     }
 
     async create(data:any):Promise<Card>{

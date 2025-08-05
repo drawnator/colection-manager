@@ -4,8 +4,8 @@ import { CollectionRepository } from "../repository/collectionRepository";
 export class CollectionService{
     private repository: CollectionRepository;
 
-    constructor(){
-        this.repository = new CollectionRepository();
+    constructor(repository:CollectionRepository){
+        this.repository = repository;
     }
 
     async create(data:any):Promise<Collection>{

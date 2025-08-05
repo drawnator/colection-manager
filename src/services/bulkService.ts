@@ -5,8 +5,8 @@ import { BulkRepository } from "../repository/bulkRepository";
 export class BulkService{
     private repository: BulkRepository;
 
-    constructor(){
-        this.repository = new BulkRepository();
+    constructor(repository:BulkRepository){
+        this.repository = repository;
     }
 
     async create(data:any):Promise<Bulk>{
@@ -19,6 +19,10 @@ export class BulkService{
             throw new Error("instancia inexistence")
         }
         return instance;
+    }
+
+    async getByUserId(id: number):Promise<Bulk[]>{
+        return await this.repository.findBulksByOwnerId(id);
     }
 
     async update(id:number,data:any):Promise<[number]>{

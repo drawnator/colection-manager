@@ -9,11 +9,19 @@ export class BulkRepository {
     }
 
     async create(data:any):Promise<Bulk>{
+        const repeated = await this.model.findAll({where:{ownerId:data.ownerId,name:data.name}})
+        if (repeated.length > 0){
+            throw Error("bulk repetido")
+        }
         return await this.model.create(data);
     }
 
     async findById(id:number): Promise<Bulk|null>{
-    return await this.model.findByPk(id);
+        return await this.model.findByPk(id);
+    }
+
+    async findBulksByOwnerId(id:number):Promise<Bulk[]>{
+        return await this.model.findAll({where:{ownerId:id}});
     }
 
     async update(id:number,data:Partial<Bulk>):Promise<[number]>{
