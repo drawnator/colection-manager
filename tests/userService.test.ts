@@ -18,6 +18,7 @@ import { CardRepository } from "../src/repository/cardRepository";
 import { BulkRepository } from "../src/repository/bulkRepository";
 import { DeckRepository } from "../src/repository/deckRepository";
 import { CollectionRepository } from "../src/repository/collectionRepository";
+import { User } from "../src/models/User";
 
 describe("Criação de Usuário", () => {
     let userService: UserService;
@@ -183,3 +184,123 @@ describe("Criação de Usuário", () => {
         expect(createdUser.isActive).toBe(true);
     });
 })
+
+describe("Busca de Usuário", () => {
+    let userService: UserService;
+    let user1: User;
+    let user2: User;
+    let user3: User;
+
+    beforeEach(async () => {
+        
+        const cardRepository = new CardRepository();
+        const bulkRepository = new BulkRepository();
+        const deckRepository = new DeckRepository();
+        const collectionRepository = new CollectionRepository();
+        const userRepository = new UserRepository();
+
+        userService = new UserService(userRepository,bulkRepository);
+
+        //TODO use test database instead of default
+        await sequelize.sync({ force: true }).then(() => console.log("Database synced for testing"));
+        const user1Data = { name: "userTest",
+                        password: "$Password123",
+                        email:"testemail@email.com" };
+        const user2Data = { name: "userTest2",
+                        password: "Password123$",
+                        email:"test2email@email.com"};
+        const user3Data = { name: "userTest3",
+                        password: "Password$123",
+                        email:"test3email@email.com"};
+        user1 = await userService.createUserCrypt(user1Data);
+        user2 = await userService.createUserCrypt(user2Data);
+        user3 = await userService.createUserCrypt(user3Data);
+        user3.isActive = false;
+        await user3.save();
+    });
+    afterEach(()=>{
+        sequelize.dropAllSchemas({})
+    });
+
+    it("por id", async () => {
+        const user = await userService.getUser(1);
+        expect(user).toHaveProperty("id");
+        expect(user.name).toBe(user1.name);
+        expect(user.email).toBe(user1.email);
+        expect(user.isActive).toBe(true);
+        expect(user.id).toBe(user1.id);
+    });
+
+    it("por id inexistente", async () => {
+        await expect(userService.getUser(999)).rejects.toThrow("Usuário não encontrado");
+    });
+
+    it("por id com id negativo", async () => {
+        await expect(userService.getUser(-1)).rejects.toThrow("Usuário não encontrado");
+    });
+
+    it("por id com id zero", async () => {
+        await expect(userService.getUser(0)).rejects.toThrow("Usuário não encontrado");
+    });
+
+    it("por id com id não numérico", async () => {
+        await expect(userService.getUser("abc" as any)).rejects.toThrow("Usuário não encontrado");
+    });
+
+    it("por id com id decimal", async () => {
+        await expect(userService.getUser(1.5 as any)).rejects.toThrow("Usuário não encontrado");
+    });
+
+    it("por id com id string", async () => {
+        const user = await userService.getUser("1" as any);
+        expect(user).toHaveProperty("id");
+        expect(user.name).toBe(user1.name);
+        expect(user.email).toBe(user1.email);
+        expect(user.isActive).toBe(true);
+        expect(user.id).toBe(user1.id);
+    });
+
+    it("por id com id booleano", async () => {
+        await expect(userService.getUser(true as any)).rejects.toThrow("Usuário não encontrado");
+    });
+
+    it("por id com id objeto", async () => {
+        await expect(userService.getUser({} as any)).rejects.toThrow("Usuário não encontrado");
+    });
+
+    it("por todos ativos", async () => {
+        const activeUsers = await userService.getActiveUsers();
+        expect(activeUsers).toHaveLength(2);
+        expect(activeUsers[0].isActive).toBe(true);
+        expect(activeUsers[1].isActive).toBe(true);
+        expect(activeUsers).not.toContainEqual(expect.objectContaining({ id: user3.id }));
+        expect(activeUsers[0].dataValues).not.toHaveProperty("password");
+        expect(activeUsers[1].dataValues).not.toHaveProperty("password");
+    });
+
+    it("por todos ativos com nenhum ativo", async () => {
+        user1.isActive = false;
+        user2.isActive = false;
+        await user1.save();
+        await user2.save();
+        const activeUsers = await userService.getActiveUsers();
+        expect(activeUsers).toHaveLength(0);
+    });
+
+    it("por todos ativos com um só um ativo", async () => {
+        user1.isActive = false;
+        await user1.save();
+        const activeUsers = await userService.getActiveUsers();
+        expect(activeUsers).toHaveLength(1);
+        expect(activeUsers[0].isActive).toBe(true);
+        expect(activeUsers[0].id).toBe(user2.id);
+    });
+
+    it("por todos ativos sem usuários", async () => {
+        await userService.delete(user1.id);
+        await userService.delete(user2.id);
+        const activeUsers = await userService.getActiveUsers();
+        expect(activeUsers).toHaveLength(0);
+    });
+
+});
