@@ -304,3 +304,60 @@ describe("Busca de Usuário", () => {
     });
 
 });
+
+describe("Autenticação de Usuário", () => {
+    let userService: UserService;
+    let user1: User;
+    let user2: User;
+
+    beforeEach(async () => {
+        
+        const cardRepository = new CardRepository();
+        const bulkRepository = new BulkRepository();
+        const deckRepository = new DeckRepository();
+        const collectionRepository = new CollectionRepository();
+        const userRepository = new UserRepository();
+
+        userService = new UserService(userRepository,bulkRepository);
+
+        //TODO use test database instead of default
+        await sequelize.sync({ force: true }).then(() => console.log("Database synced for testing"));
+        const user1Data = { name: "userTest",
+                        password: "$Password123",
+                        email:"testemail@email.com"}
+        user1 = await userService.createUserCrypt(user1Data);
+        const user2Data = { name: "userTest2",
+                        password: "Password123$",
+                        email:"test2email@email.com"};
+    });
+
+    afterEach(()=>{
+        sequelize.dropAllSchemas({})
+    });
+    it("login sucesso", async () => {
+        const password = "$Password123";
+        const email ="testemail@email.com";
+        const {user, token} = await userService.authenticate(email, password);
+        expect(user).toHaveProperty("id");
+        expect(user.name).toBe(user1.name);
+        expect(user.email).toBe(user1.email);
+        expect(user.isActive).toBe(true);
+        expect(user.id).toBe(user1.id);
+        expect(token).toBeDefined();
+        expect(token).not.toBe("");
+        expect(token).not.toBeNull();
+
+    });
+
+    it("login falha senha errada", async () => {
+        const password = "WrongPassword123$";
+        const email ="testemail@email.com";
+        await expect(userService.authenticate(password, email)).rejects.toThrow("Email ou senha incorretos");
+    });
+
+    it("login falha email errado", async () => {
+        const password = "$Password123";
+        const email ="wrongemail@emai.com";
+        await expect(userService.authenticate(email, password)).rejects.toThrow("Email ou senha incorretos");
+    });
+});
