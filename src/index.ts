@@ -9,16 +9,18 @@ import { BulkController } from "./controllers/bulkController";
 import { DeckController } from "./controllers/deckController";
 import { CollectionController } from "./controllers/collectionController";
 import { UserController } from "./controllers/userController";
-import { UserRepository } from "./repository/userRepository";
-import { CardRepository } from "./repository/cardRepository";
-import { BulkRepository } from "./repository/bulkRepository";
-import { DeckRepository } from "./repository/deckRepository";
-import { CollectionRepository } from "./repository/collectionRepository";
+
 import { CardService } from "./services/cardService";
 import { BulkService } from "./services/bulkService";
 import { DeckService } from "./services/deckService";
 import { CollectionService } from "./services/collectionService";
 import { UserService } from "./services/userService";
+
+import { UserRepository } from "./repository/userRepository";
+import { CardRepository } from "./repository/cardRepository";
+import { BulkRepository } from "./repository/bulkRepository";
+import { DeckRepository } from "./repository/deckRepository";
+import { CollectionRepository } from "./repository/collectionRepository";
 
 dotenv.config();
 
