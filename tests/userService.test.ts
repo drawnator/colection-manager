@@ -1,16 +1,6 @@
 
 import  sequelize from "../src/config/database";
 
-// import { CardController } from "../src/controllers/cardController";
-// import { BulkController } from "../src/controllers/bulkController";
-// import { DeckController } from "../src/controllers/deckController";
-// import { CollectionController } from "../src/controllers/collectionController";
-// import { UserController } from "../src/controllers/userController";
-
-// import { CardService } from "../src/services/cardService";
-// import { BulkService } from "../src/services/bulkService";
-// import { DeckService } from "../src/services/deckService";
-// import { CollectionService } from "../src/services/collectionService";
 import { UserService } from "../src/services/userService";
 
 import { UserRepository } from "../src/repository/userRepository";
@@ -34,7 +24,7 @@ describe("Criação de Usuário", () => {
         userService = new UserService(userRepository,bulkRepository);
 
         //TODO use test database instead of default
-        await sequelize.sync({ force: true }).then(() => console.log("Database synced for testing"));
+        await sequelize.sync({ force: true });
     });
     afterEach(()=>{
         sequelize.dropAllSchemas({})
@@ -81,6 +71,7 @@ describe("Criação de Usuário", () => {
         await userService.createUserCrypt(userData);
         await expect(userService.createUserCrypt(userData)).rejects.toThrow("Email já está em uso.");
     });
+    
     it("Email sem @", async () => {
         const userData = { name: "userTest",
                         password: "$Password123",
@@ -202,7 +193,7 @@ describe("Busca de Usuário", () => {
         userService = new UserService(userRepository,bulkRepository);
 
         //TODO use test database instead of default
-        await sequelize.sync({ force: true }).then(() => console.log("Database synced for testing"));
+        await sequelize.sync({ force: true });
         const user1Data = { name: "userTest",
                         password: "$Password123",
                         email:"testemail@email.com" };
@@ -321,7 +312,7 @@ describe("Autenticação de Usuário", () => {
         userService = new UserService(userRepository,bulkRepository);
 
         //TODO use test database instead of default
-        await sequelize.sync({ force: true }).then(() => console.log("Database synced for testing"));
+        await sequelize.sync({ force: true });
         const user1Data = { name: "userTest",
                         password: "$Password123",
                         email:"testemail@email.com"}
@@ -379,7 +370,7 @@ describe("atualização de Usuário", () => {
         userService = new UserService(userRepository,bulkRepository);
 
         //TODO use test database instead of default
-        await sequelize.sync({ force: true }).then(() => console.log("Database synced for testing"));
+        await sequelize.sync({ force: true });
         const user1Data = { name: "userTest",
                         password: "$Password123",
                         email:"testemail@email.com" };
@@ -444,7 +435,7 @@ describe("desativação de Usuário", () => {
         userService = new UserService(userRepository,bulkRepository);
 
         //TODO use test database instead of default
-        await sequelize.sync({ force: true }).then(() => console.log("Database synced for testing"));
+        await sequelize.sync({ force: true });
         const user1Data = { name: "userTest",
                         password: "$Password123",
                         email:"testemail@email.com" };
