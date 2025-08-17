@@ -4,7 +4,7 @@
   "description": "colection manager and deck tracker for pokemon tcg",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --runInBand --verbose --noStackTrace --silent --coverage",
     "start": "node server.js",
     "dev": "ts-node src/index.ts"
   },
