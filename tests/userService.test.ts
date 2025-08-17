@@ -361,3 +361,68 @@ describe("Autenticação de Usuário", () => {
         await expect(userService.authenticate(email, password)).rejects.toThrow("Email ou senha incorretos");
     });
 });
+
+describe("atualização de Usuário", () => {
+    let userService: UserService;
+    let user1: User;
+    let user2: User;
+    let user3: User;
+        
+    beforeEach(async () => {
+        const cardRepository = new CardRepository();
+        const bulkRepository = new BulkRepository();
+        const deckRepository = new DeckRepository();
+        const collectionRepository = new CollectionRepository();
+        const userRepository = new UserRepository();
+
+        userService = new UserService(userRepository,bulkRepository);
+
+        //TODO use test database instead of default
+        await sequelize.sync({ force: true }).then(() => console.log("Database synced for testing"));
+        const user1Data = { name: "userTest",
+                        password: "$Password123",
+                        email:"testemail@email.com" };
+        const user2Data = { name: "userTest2",
+                        password: "Password123$",
+                        email:"test2email@email.com"};
+        const user3Data = { name: "userTest3",
+                        password: "Password$123",
+                        email:"test3email@email.com"};
+        user1 = await userService.createUserCrypt(user1Data);
+        user2 = await userService.createUserCrypt(user2Data);
+        user3 = await userService.createUserCrypt(user3Data);
+        user3.isActive = false;
+        await user3.save();
+        
+    });
+
+    afterEach(()=>{
+        sequelize.dropAllSchemas({})
+    });
+
+    it("atualização de nome", async () => {
+        const newName = "Novo Nome";
+        const updatedUser = await userService.updateCrypt(user1.id, { name: newName });
+        expect(updatedUser[0]).toBe(1);
+        const user = await userService.getUser(user1.id);
+        expect(user.name).toBe(newName);
+    });
+
+    it("atualização de email", async () => {
+        const newEmail = "testenovo@email.com";
+        const updatedUser = await userService.updateCrypt(user1.id, { email: newEmail});
+        expect(updatedUser[0]).toBe(1);
+        const user = await userService.getUser(user1.id);
+        expect(user.email).toBe(newEmail);
+    });
+
+    it("atualização de senha", async () => {
+        const newPassword = "NovaSenha123$";
+        const updatedUser = await userService.updateCrypt(user1.id, { password: newPassword });
+        expect(updatedUser[0]).toBe(1);
+        const user = await userService.getUser(user1.id);
+        expect(user.password).not.toBe(user1.password);
+        const {user: authenticatedUser} = await userService.authenticate(user.email, newPassword);
+        expect(authenticatedUser.id).toBe(user.id);
+    });
+});
