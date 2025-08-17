@@ -334,6 +334,7 @@ describe("Autenticação de Usuário", () => {
     afterEach(()=>{
         sequelize.dropAllSchemas({})
     });
+
     it("login sucesso", async () => {
         const password = "$Password123";
         const email ="testemail@email.com";
@@ -424,5 +425,83 @@ describe("atualização de Usuário", () => {
         expect(user.password).not.toBe(user1.password);
         const {user: authenticatedUser} = await userService.authenticate(user.email, newPassword);
         expect(authenticatedUser.id).toBe(user.id);
+    });
+});
+
+describe("desativação de Usuário", () => {
+    let userService: UserService;
+    let user1: User;
+    let user2: User;
+    let user3: User;
+        
+    beforeEach(async () => {
+        const cardRepository = new CardRepository();
+        const bulkRepository = new BulkRepository();
+        const deckRepository = new DeckRepository();
+        const collectionRepository = new CollectionRepository();
+        const userRepository = new UserRepository();
+
+        userService = new UserService(userRepository,bulkRepository);
+
+        //TODO use test database instead of default
+        await sequelize.sync({ force: true }).then(() => console.log("Database synced for testing"));
+        const user1Data = { name: "userTest",
+                        password: "$Password123",
+                        email:"testemail@email.com" };
+        const user2Data = { name: "userTest2",
+                        password: "Password123$",
+                        email:"test2email@email.com"};
+        const user3Data = { name: "userTest3",
+                        password: "Password$123",
+                        email:"test3email@email.com"};
+        user1 = await userService.createUserCrypt(user1Data);
+        user2 = await userService.createUserCrypt(user2Data);
+        user3 = await userService.createUserCrypt(user3Data);
+        user3.isActive = false;
+        await user3.save();
+        
+    });
+
+    afterEach(()=>{
+        sequelize.dropAllSchemas({})
+    });
+
+    it("usuário ativo", async () => {
+        const result = await userService.delete(user1.id);
+        expect(result[0]).toBe(1);
+        await expect(userService.getUser(user1.id)).rejects.toThrow("Usuário não encontrado");
+        const activeUsers = await userService.getActiveUsers();
+        expect(activeUsers).toHaveLength(1);
+        expect(activeUsers[0].id).toBe(user2.id);
+    });
+
+    it("já desativado", async () => {
+        await expect(userService.delete(user3.id)).rejects.toThrow("Usuário não encontrado");
+        const activeUsers = await userService.getActiveUsers();
+        expect(activeUsers).toHaveLength(2);
+    });
+
+    it("usuário inexistente", async () => {
+        await expect(userService.delete(999)).rejects.toThrow("Usuário não encontrado");
+        const activeUsers = await userService.getActiveUsers();
+        expect(activeUsers).toHaveLength(2);
+    });
+
+    it("com id negativo", async () => {
+        await expect(userService.delete(-1)).rejects.toThrow("Usuário não encontrado");
+        const activeUsers = await userService.getActiveUsers();
+        expect(activeUsers).toHaveLength(2);
+    });
+
+    it("com id não numérico", async () => {
+        await expect(userService.delete("abc" as any)).rejects.toThrow("Usuário não encontrado");
+        const activeUsers = await userService.getActiveUsers();
+        expect(activeUsers).toHaveLength(2);
+    });
+
+    it("com id decimal", async () => {
+        await expect(userService.delete(1.5 as any)).rejects.toThrow("Usuário não encontrado");
+        const activeUsers = await userService.getActiveUsers();
+        expect(activeUsers).toHaveLength(2);
     });
 });
