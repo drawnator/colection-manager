@@ -68,6 +68,10 @@ export class UserService {
         return user;
     }
     async updateCrypt(id: number,attr:Partial<User>):Promise<[Number]>{
+        if (attr.password) {
+            const hashedPassword = await bcrypt.hash(attr.password, 10);
+            attr.password = hashedPassword;
+        }
         const user = await this.userRepository.update(id,attr);
         if (!user){
             throw new Error("Usuário não encontrado");
@@ -81,8 +85,9 @@ export class UserService {
             throw new Error('Email ou senha incorretos')
         }
         const passwordOK = await bcrypt.compare(password,user.password);
-
-        if (!passwordOK) throw new Error("Email ou senha incorretos");
+        if (!passwordOK){
+            throw new Error("Email ou senha incorretos");
+        }
 
         const payload = {id:user.id, email:user.email};
 
