@@ -148,7 +148,7 @@ describe("busca de coleção",() =>{
 
     });
 
-    it("id int",async () =>{
+    it("id inexistente",async () =>{
         await expect(collectionService.get("wrongID")).rejects.toThrow("Coleção não encontrada")
     });
 
