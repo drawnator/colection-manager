@@ -3,7 +3,7 @@ import sequelize from '../config/database';
 import { Collection } from './Collection';
 import { User } from './User';
 
-enum Modifier {
+export enum Modifier {
   Normal = 'normal',
   holo = 'holo',
   Reverse = 'reverse',
