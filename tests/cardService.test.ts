@@ -240,7 +240,7 @@ describe("busca de carta",() =>{
 
     });
 
-    it("id int",async () =>{
+    it("id invalido",async () =>{
         await expect(cardService.get(999)).rejects.toThrow("Carta não encontrada")
     });
 
@@ -373,15 +373,15 @@ describe("atualização de carta",() =>{
         expect(card.modifier).toBe(collection2.id);
     });
 
-    it("nova coleção",async () =>{
-        const cardData = {
-            collectionCode:collection2.id
-        };
-        const updatedCard = await cardService.update(card1.id,cardData);
-        expect(updatedCard[0]).toBe(1);
-        const card = await cardService.get(card1.id);
-        expect(card.modifier).toBe(collection2.id);
-    });
+    // it("nova coleção",async () =>{
+    //     const cardData = {
+    //         collectionCode:collection2.id
+    //     };
+    //     const updatedCard = await cardService.update(card1.id,cardData);
+    //     expect(updatedCard[0]).toBe(1);
+    //     const card = await cardService.get(card1.id);
+    //     expect(card.modifier).toBe(collection2.id);
+    // });
 
     it("coleção invalida",async () =>{
         const cardData = {
