@@ -120,7 +120,7 @@ describe("criação de bulk",() =>{
         await expect(bulkService.create(bulkData)).rejects.toThrow("Todos os atributos são obrigatórios");
     });
 
-    it("com id",async () =>{
+    it("com id negativo",async () =>{
         const bulkData = {
             id: -1,
             ownerId: user1.id,
@@ -157,7 +157,102 @@ describe("criação de bulk",() =>{
 
 })
 
-// describe("interação de cartas com o bulk",() =>{})
+describe("interação de cartas com o bulk",() =>{
+    let user1: User;
+    let user2: User;
+    let user3: User;
+    let collection1: Collection;
+    let collection2: Collection;
+    let card1: Card;
+    let card2: Card;
+    let bulk1: Bulk;
+    let bulk2: Bulk;
+
+    let bulkService: BulkService;
+
+    beforeEach(async ()=>{
+        const cardRepository = new CardRepository();
+        const bulkRepository = new BulkRepository();
+        const deckRepository = new DeckRepository();
+        const collectionRepository = new CollectionRepository();
+        const userRepository = new UserRepository();
+
+        const collectionService = new CollectionService(collectionRepository);
+        const userService = new UserService(userRepository,bulkRepository);
+        const cardService = new CardService(cardRepository);
+        bulkService = new BulkService(bulkRepository);
+
+        await sequelize.sync({ force: true });
+
+        const collectionData = {
+            id:"COL",
+            family:"Scarlet & Violet",
+            name:"Coleção 1",
+            total:151};
+        const collectionData2 = {
+            id:"COL2",
+            family:"a & b",
+            name:"Coleção 2",
+            total:0};
+        collection1 = await collectionService.create(collectionData);
+        collection2 = await collectionService.create(collectionData2);
+
+        const user1Data = { name: "userTest",
+                        password: "$Password123",
+                        email:"testemail@email.com" };
+        const user2Data = { name: "userTest2",
+                        password: "Password123$",
+                        email:"test2email@email.com"};
+        const user3Data = { name: "userTest3",
+                        password: "Password$123",
+                        email:"test3email@email.com"};
+        user1 = await userService.createUserCrypt(user1Data);
+        user2 = await userService.createUserCrypt(user2Data);
+        user3 = await userService.createUserCrypt(user3Data);
+        user3.isActive = false;
+        await user3.save();
+
+        const cardData1 = {
+            ownerId:user1.id,
+            collectionCode:collection1.id,
+            number:101,
+            modifier:Modifier.Normal};
+        const cardData2 = {
+            ownerId:user2.id,
+            collectionCode:collection2.id,
+            number:1,
+            modifier:Modifier.holo};
+        card1 = await cardService.create(cardData1);
+        card2 = await cardService.create(cardData2);
+
+        const bulkData1 = {
+            ownerId: user1.id,
+            name:"nome do bulk",
+            description:"descrição do bulk",
+        };
+        const bulkData2 = {
+            ownerId: user1.id,
+            name:"outro nome do bulk",
+            description:"outra descrição do bulk",
+        };
+        bulk1 = await bulkService.create(bulkData1);
+        bulk2 = await bulkService.create(bulkData2);
+
+    });
+
+    afterEach(()=>{sequelize.dropAllSchemas({})});
+
+    it("colocar cartas no bulk",async() =>{
+        const added = bulkService.add_card(bulk1.id,card1.id);
+        expect(added).toBe(1);
+        const retrieved = await bulkService.get_cards(bulk1.id)
+        expect(retrieved[0].id).toBe(card1.id)
+    })
+
+    // it("retirar cartas no bulk",async() =>{})
+
+    // it("listar cartas no bulk",async() =>{})
+})
 
 describe("busca de bulk",() =>{
     let user1: User;
@@ -247,14 +342,14 @@ describe("busca de bulk",() =>{
     it("Id válido",async () =>{
         const bulk = await bulkService.get(bulk1.id);
         expect(bulk).toHaveProperty("id");
-        expect(bulk.id).toBe(bulk1.ownerId);
+        expect(bulk.id).toBe(bulk1.id);
         expect(bulk.ownerId).toBe(bulk1.ownerId);
         expect(bulk.name).toBe(bulk1.name);
         expect(bulk.description).toBe(bulk1.description);
 
     });
 
-    it("id int",async () =>{
+    it("id invalido",async () =>{
         await expect(bulkService.get(999)).rejects.toThrow("bulk não encontrada")
     });
 
@@ -358,7 +453,7 @@ describe("atualização de bulk",() =>{
         };
         const updated = await bulkService.update(bulk1.id,bulkData);
         expect(updated[0]).toBe(1);
-        const afterUpdate = await bulkService.get(card1.id);
+        const afterUpdate = await bulkService.get(bulk1.id);
         expect(afterUpdate.name).toBe(bulkData.name);
     });
 
